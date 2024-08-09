@@ -1,5 +1,5 @@
-import WidgetCore from './WidgetCore';
-import Observer from './Observer';
+import WidgetCore from './core/WidgetCore';
+import Observer from './observers/Observer';
 import Widget from "./widgets/Widget";
 import WidgetFactory from './factories/WidgetFactory';
 

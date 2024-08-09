@@ -5,10 +5,22 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@core/*": ["core/*"],
+      "@factories/*": ["factories/*"],
+      "@observers/*": ["observers/*"],
+      "@exceptions/*": ["exceptions/*"],
+      "@widgets/*": ["widgets/*"],
+      "@tests/*": ["tests/*"]
+    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "../../Library/Caches/JetBrains/WebStorm2024.1/javascript/typings/node/22.1.0/node_modules/@types/node/globals.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,5 @@
 interface IWidget {
     initialized: boolean;
-    init(target: Element, done: (err?: Error|undefined) => void): Promise<void>;
+    init(target: Element, done: (err?: Error) => void): Promise<void>;
     destroy(): void;
 }

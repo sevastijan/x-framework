@@ -20,34 +20,39 @@ The X Framework library combines the Factory design pattern with the Observer pa
 ## Structure
 
 ```
-/x-framework
-│
+
 ├── /src
+│   ├── /core
+│   │   ├── WidgetCore.ts
+│   │   ├── WidgetManager.ts
+│   │   └── types.ts  
 │   ├── /exceptions
 │   │   ├── WidgetDestroyedError.ts
 │   │   ├── WidgetInitializationException.ts
 │   │   └── WidgetInstanceNotFoundException.ts   
 │   ├── /factories
-│   │   └── WidgetFactory.ts   
+│   │   ├── IWidgetFactory.ts
+│   │   └── WidgetFactory.ts
+│   ├── /observers
+│   │   ├── IObserver.ts
+│   │   └── Observer.ts     
 │   ├── /widgets
 │   │   ├── IWidget.ts
 │   │   ├── Widget.ts        
 │   │   ├── a.ts       
 │   │   ├── b.ts       
-│   │   └── c.ts       
-│   ├── WidgetCore.ts        
-│   ├── WidgetFactory.ts     
-│   ├── Observer.ts          
+│   │   └── c.ts          
 │   └── index.ts             
 │
 ├── /dist
 │   └── widget-library.js    
 │
-├── /test
-│   └── app.ts               
+├── /browserTester
+│   └── index.html              
 │
 ├── package.json             
-├── tsconfig.json            
+├── tsconfig.json
+├── README.md                    
 └── webpack.config.js        
 ```
 
@@ -78,7 +83,7 @@ Script `build` will run webpack and generate `widget-library.js` in directory `d
 To init widgets use method `init()` from class `X`
 
 ```typescript
-const x = new X();
+const x = new X.default();
 
 x.init(document.getElementById('root'), (error) => {
     if (error) {
@@ -103,18 +108,25 @@ The `destroy()` method deletes the widget instances and their containers, but do
 
 You can add your own observers to react to widget initialization and destruction events.
 
+Below is a list of available events that you can listen to:
+
+- `init_success`: Triggered when a widget is successfully initialized.
+- `init_error`: Triggered when an error occurs during the initialization of a widget.
+- `init_complete`: Triggered when the initialization process for all widgets is complete.
+- `destroy_complete`: Triggered when all widgets within the target element are destroyed.
+
 #### Example:
 
 ```typescript
 class TestObserver extends Observer {
-    update(event: string, data?: any) {
+    update(event, data) {
         if (event === 'init_success') {
             console.log(`Widget ${data.widgetPath} initialized successfully`);
         }
     }
 }
 
-const x = new WidgetCore();
+const x = new X();
 
 x.addObserver(new TestObserver());
 ```

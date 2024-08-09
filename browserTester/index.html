@@ -65,7 +65,7 @@
         document.getElementById('done-widget').addEventListener('click', () => {
             const elements = Array.from(root.querySelectorAll('[widget]'));
             elements.forEach(element => {
-                const widgetInstance = x.widgets.get(element);
+                const widgetInstance = x.widgetManager.getWidget(element)
                 if (widgetInstance) {
                     widgetInstance.afterInit(element).then(() => {
                         logMessage(`Widget ${element.getAttribute('widget')} marked as done.`);
@@ -77,7 +77,7 @@
         document.getElementById('fail-widget').addEventListener('click', () => {
             const elements = Array.from(root.querySelectorAll('[widget]'));
             elements.forEach(element => {
-                const widgetInstance = x.widgets.get(element);
+                const widgetInstance = x.widgetManager.getWidget(element)
                 if (widgetInstance) {
                     logMessage(`Widget ${element.getAttribute('widget')} failed.`);
                     updateInfoBlock(`[widget="${element.getAttribute('widget')}"]`, new Error('Example fail'));
