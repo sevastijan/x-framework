@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Widget Library Test</title>
+    <style>
+        #info-block {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<div id="root">
+    <div widget="widgets/a">
+        <div widget="widgets/b"></div>
+    </div>
+    <div widget="widgets/c"></div>
+</div>
+
+<button id="init-widget">Init</button>
+<button id="destroy-widget">Destroy</button>
+<button id="done-widget">Done</button>
+<button id="fail-widget">Fail</button>
+
+<div id="messageContainer"></div>
+<div id="info-block">Info Block</div>
+
+<script src="../dist/widget-library.js" defer></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const messageContainer = document.getElementById("messageContainer");
+        const infoBlock = document.getElementById("info-block");
+        const root = document.getElementById("root");
+
+        const logMessage = (message) => {
+            const p = document.createElement('p');
+            p.textContent = message;
+            messageContainer.appendChild(p);
+        };
+
+        const updateInfoBlock = (selector, error) => {
+            infoBlock.innerHTML = `<p>Selected Node: ${selector}</p>`;
+            if (error) {
+                infoBlock.innerHTML += `<p>Error: ${error.message}</p>`;
+            }
+        };
+
+        const x = new X.default();
+
+        document.getElementById('init-widget').addEventListener('click', () => {
+            x.init(root, (error) => {
+                if (error) {
+                    console.error('Initialization failed', error);
+                }
+            });
+        });
+
+        document.getElementById('destroy-widget').addEventListener('click', () => {
+            x.destroy(root);
+        });
+
+        document.getElementById('done-widget').addEventListener('click', () => {
+            const elements = Array.from(root.querySelectorAll('[widget]'));
+            elements.forEach(element => {
+                const widgetInstance = x.widgets.get(element);
+                if (widgetInstance) {
+                    widgetInstance.afterInit(element).then(() => {
+                        logMessage(`Widget ${element.getAttribute('widget')} marked as done.`);
+                    });
+                }
+            });
+        });
+
+        document.getElementById('fail-widget').addEventListener('click', () => {
+            const elements = Array.from(root.querySelectorAll('[widget]'));
+            elements.forEach(element => {
+                const widgetInstance = x.widgets.get(element);
+                if (widgetInstance) {
+                    logMessage(`Widget ${element.getAttribute('widget')} failed.`);
+                    updateInfoBlock(`[widget="${element.getAttribute('widget')}"]`, new Error('Example fail'));
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
